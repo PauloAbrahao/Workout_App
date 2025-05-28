@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:workout_app/screens/progress_screen.dart';
+import 'package:workout_app/screens/workout_details.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -99,7 +101,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressScreen(),
+                            ),
+                          );
+                        },
                         child: Container(
                           padding: EdgeInsets.symmetric(
                             vertical: 8,
@@ -186,6 +195,7 @@ class HomeScreen extends StatelessWidget {
                   '45 min - Medium',
                   Icons.fitness_center,
                   0.68,
+                  context,
                 ),
                 SizedBox(height: 15),
                 _buildWorkoutCard(
@@ -193,6 +203,7 @@ class HomeScreen extends StatelessWidget {
                   '30 min - Intermediate',
                   Icons.accessibility_new,
                   0.45,
+                  context,
                 ),
                 SizedBox(height: 15),
                 _buildWorkoutCard(
@@ -200,6 +211,7 @@ class HomeScreen extends StatelessWidget {
                   '20 min - High Intensity',
                   Icons.directions_run,
                   0.32,
+                  context,
                 ),
               ],
             ),
@@ -250,80 +262,89 @@ class HomeScreen extends StatelessWidget {
     String subtitle,
     IconData icon,
     double progress,
+    BuildContext context,
   ) {
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            spreadRadius: 2,
-            color: Colors.grey.withOpacity(0.1),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Color(0xFF6C63FF).withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WorkoutDetailsScreen()),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              spreadRadius: 2,
+              color: Colors.grey.withOpacity(0.1),
             ),
-            child: Center(
-              child: Icon(icon, color: Color(0xFF6C63FF), size: 25),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Color(0xFF6C63FF).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Icon(icon, color: Color(0xFF6C63FF), size: 25),
+              ),
             ),
-          ),
-          SizedBox(width: 15),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            SizedBox(width: 15),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    subtitle,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+            Column(
               children: [
-                Text(
-                  title,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  subtitle,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: Stack(
+                    children: [
+                      CircularProgressIndicator(
+                        value: progress,
+                        backgroundColor: Colors.grey,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFF6C63FF),
+                        ),
+                        strokeWidth: 5,
+                      ),
+                      Center(
+                        child: Text(
+                          '${(progress * 100).round()}%',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          Column(
-            children: [
-              SizedBox(
-                height: 40,
-                width: 40,
-                child: Stack(
-                  children: [
-                    CircularProgressIndicator(
-                      value: progress,
-                      backgroundColor: Colors.grey,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF6C63FF),
-                      ),
-                      strokeWidth: 5,
-                    ),
-                    Center(
-                      child: Text(
-                        '${(progress * 100).round()}%',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
